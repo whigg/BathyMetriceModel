@@ -1,15 +1,15 @@
 # File      :SeaSurfaceAndSeaFloorDetection_02.py
 # Author    :WJ
-# Function  :海面海底光子检测
+# Function  :海面海底光子检测   先单峰拟合，再双峰拟合
 # Time      :2021/07/10
-# Version   :2.0
+# Version   :3.0
 # Amend     :
 
 import math
 import pandas as pd
 import numpy as np
 np.set_printoptions(suppress=False, linewidth=np.nan,precision=3, formatter={'float': '{: 0.3f}'.format})
-import GaussianDistributionFitting as GausFit
+import GaussianDistributionFitting_0801 as GausFit
 from icecream import ic
 
 def get_v(D, n):
@@ -63,17 +63,27 @@ def surfaceAndFloorDetection(ph_data,step_01,step_02):
         # 3.2 计算总直方图
         n=len(data_atl03)
         ic(len(data_atl03))
-        D = 1
-        v=get_v(D,n)
+        # D = 1
+        # v=get_v(D,n)
 
-        # v = 0.1
+        v = 0.1
+
+        # hist_0=hist(data_atl03['h_ph'].values, v)
+        # ic((hist_0))
+        # para0 = GausFit.Gaussian1_fit(hist_0[:, 0], hist_0[:, 1])
+        # u0=para0[1]
+        # sigma0=para0[2]
+        # data_atl03 = data_atl03[
+        #     (u0 - 3 * abs(sigma0) <= data_atl03['h_ph']) & (data_atl03['h_ph'] < u0 + 3 * abs(sigma0))]
+
         hist_2 = hist(data_atl03['h_ph'].values, v)
+        ic((hist_2))
         # 3.3 双峰高斯分布拟合
         para = GausFit.Gaussian2_fit(hist_2[:, 0], hist_2[:, 1])
         print(para)
         u1, sigma1 = get_u1sigma1(para)
         # 绘制双峰高斯分布曲线
-        # GausFit.Gaussian2_show(hist_2, para, u1, sigma1, beg_01)
+        GausFit.Gaussian2_show(hist_2, para, u1, sigma1, beg_01)
         # 3.4 海表探测
         aboveSurface_ = data_atl03[data_atl03['h_ph'] >= u1 + 3 * abs(sigma1)]
         seaSurface_ = data_atl03[
@@ -111,7 +121,7 @@ def surfaceAndFloorDetection(ph_data,step_01,step_02):
                 (median - 2 * abs(sigma2) <= seafloor_['h_ph']) & (seafloor_['h_ph'] < median + 2 * abs(sigma2))]
             if len(seafloor_0) > 12:
                 seafloor_ = seafloor_0
-            # GausFit.Gaussian1_show(hist_1,para, median, sigma2, beg_02, i)
+            GausFit.Gaussian1_show(hist_1,para, median, sigma2, beg_02, i)
             if i == 0:
                 seaFloor_01 = pd.concat([seaFloor_01, seafloor_], ignore_index=False)
             elif i == 1:

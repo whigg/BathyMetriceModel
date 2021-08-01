@@ -85,7 +85,7 @@ def Gaussian1_show(data, para,med, sigma2, num, times):
     plt.xlabel('h')
     plt.ylabel('count')
     plt.legend(loc='best')
-    plt.savefig('./pic/seaFloor/Gaussian1&Hist_' + str(format(times, '1d')) + '_' + str(format(num, '1.3f')) + '.png')
+    plt.savefig('../pic/seaFloor/Gaussian1&Hist_' + str(format(times, '1d')) + '_' + str(format(num, '1.3f')) + '.png')
     # plt.pause(10)
     plt.close()
 
@@ -102,7 +102,7 @@ def Gaussian2_show(data, para, u1, sigma1, num):
     plt.xlabel('h')
     plt.ylabel('count')
     plt.legend(loc='best')
-    plt.savefig('./pic/seaSurface/Gaussian2&Hist_' + str(format(num, '1.3f')) + '.png')
+    plt.savefig('../pic/seaSurface/Gaussian2&Hist_' + str(format(num, '1.3f')) + '.png')
     # plt.pause(10)
     plt.close()
 
